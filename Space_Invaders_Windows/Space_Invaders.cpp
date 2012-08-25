@@ -89,26 +89,26 @@ SDL_Surface* load_image(std::string filename){
 }
 
 bool load_files(){
-	alienShots = load_image("alienShot.bmp");
+	alienShots = load_image("res/Images/alienShot.bmp");
 	if(alienShots == NULL)
 		return false;
-	invader = load_image("black.jpg");
+	invader = load_image("res/Images/black.jpg");
 	if(invader == NULL)
 		return false;
 	
-	shots = load_image("shot.bmp");
+	shots = load_image("res/Images/shot.bmp");
 	if(shots == NULL)
 		return false;
-	unit = load_image("pilot.bmp");
+	unit = load_image("res/Images/pilot.bmp");
 	if(unit == NULL)
 		return false;
-	explosion = load_image("explosion.bmp");
+	explosion = load_image("res/Images/explosion.bmp");
 	if(explosion == NULL)
 		return false;
-	font = TTF_OpenFont("armalite.ttf", 130);
+	font = TTF_OpenFont("res/fonts/armalite.ttf", 130);
 	if(font == NULL)
 		return false;
-	scoreFont = TTF_OpenFont("arial.ttf", 20);
+	scoreFont = TTF_OpenFont("res/fonts/arial.ttf", 20);
 	if(scoreFont == NULL)
 		return false;
 	return true;
@@ -166,7 +166,7 @@ void moveAliens(std::vector<Alien> &alienVec, int mov, bool &endOfScreen, bool &
 			apply_surface(alienVec[i].posx,alienVec[i].posy,alienVec[i].alien,screen);
 
 		if(frames_per > 0){
-            alienVec[i].posx += mov * (float(FRAMES_PER_SECOND) / frames_per);
+            alienVec[i].posx += mov * ceil(float(FRAMES_PER_SECOND) / frames_per);
         }
         else
 			alienVec[i].posx+=mov;
@@ -190,7 +190,7 @@ void checkHyperBeam(std::vector<Shot> &hyperBeam, std::vector<Alien> &alienVec, 
 			if(hyperBeam[i].shot_hit == false){
 				
 				if(frames_per > 0){
-			        hyperBeam[i].posy -= 5 * (float(FRAMES_PER_SECOND) / frames_per);
+			        hyperBeam[i].posy -= 5 * ceil(float(FRAMES_PER_SECOND) / frames_per);
 			    }
 			    else
 					hyperBeam[i].posy -= 5;
@@ -238,7 +238,7 @@ bool displayControls(SDL_Color color, bool &quit){
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0,0,0));
 
 	SDL_Surface* ctrlMessage = NULL;
-	TTF_Font* ctrlFont = TTF_OpenFont( "arial.ttf", 50);
+	TTF_Font* ctrlFont = TTF_OpenFont( "res/fonts/arial.ttf", 50);
 	if(ctrlFont == NULL){		
 		return false;
 	}
@@ -255,7 +255,7 @@ bool displayControls(SDL_Color color, bool &quit){
 	SDL_FreeSurface(ctrlMessage);		
 
 	TTF_CloseFont(ctrlFont);
-	ctrlFont = TTF_OpenFont( "arial.ttf", 20);
+	ctrlFont = TTF_OpenFont( "res/fonts/arial.ttf", 20);
 	if(ctrlFont == NULL){
 		return false;
 	}
@@ -346,7 +346,7 @@ bool titleScreen(bool &quit, bool &hardMode, bool &mediumMode, bool &easyMode){
 	//Purple-ish
 	SDL_Color titleColor = {0xBF, 0x5F, 0xFF};
 
-	titleFont = TTF_OpenFont("arial.ttf", 50);
+	titleFont = TTF_OpenFont("res/fonts/arial.ttf", 50);
 	if(titleFont == NULL){
 		cleanTitleScreen(titleName, titleFont);
 		return false;
@@ -358,7 +358,7 @@ bool titleScreen(bool &quit, bool &hardMode, bool &mediumMode, bool &easyMode){
 		return false;
 	}
 	
-	menuFont = TTF_OpenFont("arial.ttf", 20);
+	menuFont = TTF_OpenFont("res/fonts/arial.ttf", 20);
 	if(menuFont == NULL){
 		cleanTitleScreen(titleName, menuFont);
 		return false;
@@ -567,7 +567,7 @@ int main(int argc, char* args[]){
 			//To increase the speed of the alien missles.
 			if( int(((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC)) % speedUp == 0 && int(((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC)) != 0){
 				if(frames_per > 0){
-		            varSpeed += 1 * (float(FRAMES_PER_SECOND) / frames_per);
+		            varSpeed += 1 * ceil(float(FRAMES_PER_SECOND) / frames_per);
 		        }
 		        else
 					varSpeed++;
@@ -653,7 +653,7 @@ int main(int argc, char* args[]){
 
 			//Framerate regulation.
 			if(cap == true && fps.get_ticks() < 1000.f / FRAMES_PER_SECOND){
-				SDL_Delay(ceil(1000.0/FRAMES_PER_SECOND) - fps.get_ticks());
+				SDL_Delay((1000.0/FRAMES_PER_SECOND) - fps.get_ticks());
 			}
 		}
 

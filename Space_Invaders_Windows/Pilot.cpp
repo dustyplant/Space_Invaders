@@ -6,6 +6,8 @@
 #include "Shot.h"
 #include <vector>
 #include <time.h>
+#include <stdio.h>
+#include <math.h>
 
 Pilot::Pilot( int X, int Y, SDL_Surface* temp)
 {
@@ -77,7 +79,7 @@ void Pilot::pilotMovement(std::vector<Shot> &hyperBeam, SDL_Surface* shots, cloc
 
     if( (keystates[SDLK_RIGHT] || keystates[SDLK_d] ) && x + image->w < SCREEN_WIDTH){
         if(frames_per > 0){
-            x += 10 * (float(FRAMES_PER_SECOND) / frames_per);
+            x += 10 * ceil(float(FRAMES_PER_SECOND) / frames_per);
         }
         else
             x += 10;
