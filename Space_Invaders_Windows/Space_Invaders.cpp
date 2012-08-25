@@ -12,10 +12,10 @@ Written by: Shane Satterfield
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_ttf.h"
 
-#include "AlienShots.h"
-#include "Pilot.h"
-#include "Shot.h"
-#include "Alien.h"
+#include "src/AlienShots.h"
+#include "src/Pilot.h"
+#include "src/Shot.h"
+#include "src/Alien.h"
 
 #include <string>
 #include <vector>
