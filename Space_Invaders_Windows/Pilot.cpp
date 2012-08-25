@@ -76,7 +76,7 @@ void Pilot::pilotMovement(std::vector<Shot> &hyperBeam, SDL_Surface* shots, cloc
     Uint8 *keystates = SDL_GetKeyState(NULL);
 
     if( (keystates[SDLK_RIGHT] || keystates[SDLK_d] ) && x + image->w < SCREEN_WIDTH){
-        if(frames_per > 0 && frames_per < FRAMES_PER_SECOND){
+        if(frames_per > 0){
             x += 10 * (float(FRAMES_PER_SECOND) / frames_per);
         }
         else

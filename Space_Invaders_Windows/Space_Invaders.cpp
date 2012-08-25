@@ -165,7 +165,7 @@ void moveAliens(std::vector<Alien> &alienVec, int mov, bool &endOfScreen, bool &
 		if(alienVec[i].alive)
 			apply_surface(alienVec[i].posx,alienVec[i].posy,alienVec[i].alien,screen);
 
-		if(frames_per > 0 && frames_per < FRAMES_PER_SECOND){
+		if(frames_per > 0){
             alienVec[i].posx += mov * (float(FRAMES_PER_SECOND) / frames_per);
         }
         else
@@ -189,7 +189,7 @@ void checkHyperBeam(std::vector<Shot> &hyperBeam, std::vector<Alien> &alienVec, 
 		for(int i = 0; i < hyperBeam.size(); ++i){
 			if(hyperBeam[i].shot_hit == false){
 				
-				if(frames_per > 0 && frames_per < FRAMES_PER_SECOND){
+				if(frames_per > 0){
 			        hyperBeam[i].posy -= 5 * (float(FRAMES_PER_SECOND) / frames_per);
 			    }
 			    else
@@ -326,7 +326,6 @@ bool displayControls(SDL_Color color, bool &quit){
 					y = event.button.y;
 					for(int i = 0; i < vec.size(); ++i){
 						if(x > vec[i].box.x && x < vec[i].box.x + vec[i].box.w && y > vec[i].box.y && y < vec[i].box.y + vec[i].box.h){
-							//std::cout << strNames[i] << std::endl;
 							if(i + 1 == vec.size())
 								start = true;
 						}
@@ -567,7 +566,7 @@ int main(int argc, char* args[]){
 		while(!quit && !dead){
 			//To increase the speed of the alien missles.
 			if( int(((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC)) % speedUp == 0 && int(((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC)) != 0){
-				if(frames_per > 0 && frames_per < FRAMES_PER_SECOND){
+				if(frames_per > 0){
 		            varSpeed += 1 * (float(FRAMES_PER_SECOND) / frames_per);
 		        }
 		        else
@@ -644,18 +643,17 @@ int main(int argc, char* args[]){
 			if(SDL_Flip(screen) == -1)
 				return 1;
 			
-			frames++;
 
 			if(update.get_ticks() > 1000){
 				frames_per = frames / (keeper.get_ticks() / 1000.f);
-				std::cout << "Hey1";
-				std::cout << "Hey: " << frames / (keeper.get_ticks() / 1000.f) << std::endl;
 				update.start();
 			}
 
+			frames++;
+
 			//Framerate regulation.
-			if(cap == true && fps.get_ticks() < 1000 / FRAMES_PER_SECOND){
-				SDL_Delay((1000/FRAMES_PER_SECOND) - fps.get_ticks());
+			if(cap == true && fps.get_ticks() < 1000.f / FRAMES_PER_SECOND){
+				SDL_Delay(ceil(1000.0/FRAMES_PER_SECOND) - fps.get_ticks());
 			}
 		}
 
