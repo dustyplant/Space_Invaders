@@ -1,0 +1,1 @@
+g++ -o Space_Invaders.exe Space_Invaders.cpp AlienShots.cpp Alien.cpp Shot.cpp Pilot.cpp -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_ttf
