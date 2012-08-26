@@ -37,10 +37,12 @@ SDL_Surface* screen = NULL;
 SDL_Surface* invader = NULL;
 SDL_Surface* shots = NULL;
 SDL_Surface* unit = NULL;
+SDL_Surface* shieldedUnit = NULL;
 SDL_Surface* explosion = NULL;
 SDL_Surface* alienShots = NULL;
 SDL_Surface* message = NULL;
 SDL_Surface* score = NULL;
+SDL_Surface* lowShield = NULL;
 
 //Font for end game message.
 TTF_Font *font = NULL;
@@ -48,6 +50,7 @@ TTF_Font *font = NULL;
 TTF_Font *scoreFont = NULL;
 //Bluish
 SDL_Color scoreColor = {0, 0xEE, 0xEE};
+SDL_Color shieldColor = {0, 0xEE, 0xEE};
 //Maroon
 SDL_Color textColor = {0x80, 0x00, 0x00};
 SDL_Event event;
@@ -102,6 +105,13 @@ bool load_files(){
 	unit = load_image("res/Images/pilot.bmp");
 	if(unit == NULL)
 		return false;
+	shieldedUnit = load_image("res/Images/shield.bmp");
+	if(shieldedUnit == NULL)
+		return false;
+	lowShield = load_image("res/Images/lowShield.bmp");
+	if(lowShield == NULL){
+		return false;
+	}
 	explosion = load_image("res/Images/explosion.bmp");
 	if(explosion == NULL)
 		return false;
@@ -125,6 +135,7 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination){
 void cleanup(){
 	SDL_FreeSurface(shots);
 	SDL_FreeSurface(unit);
+	SDL_FreeSurface(shieldedUnit);
 	SDL_FreeSurface(explosion);
 	SDL_FreeSurface(invader);
 	SDL_FreeSurface(alienShots);
@@ -496,9 +507,11 @@ int main(int argc, char* args[]){
 
 	bool quit = false;
 	bool dead = false;
+
 	bool hardMode = true;
 	bool mediumMode = false;
 	bool easyMode = false;
+
 	frames_per = 0;
 	do{
 		//True if the player closed the window.
@@ -511,7 +524,7 @@ int main(int argc, char* args[]){
 		}
 
 		//Initialize Pilot
-		Pilot pilot((SCREEN_WIDTH - unit->w)/2, SCREEN_HEIGHT - unit->h, unit);
+		Pilot pilot((SCREEN_WIDTH - unit->w)/2, SCREEN_HEIGHT - unit->h, unit, shieldedUnit, lowShield, 0);
 
 		//Initialize Alien Vector
 		std::vector<Alien> alienVec;
@@ -524,6 +537,9 @@ int main(int argc, char* args[]){
 		int speedTimerAdder = 5;
 		int mov = invader->w*.1;
 		int slice = 3;
+		int shieldRate = 0;
+		pilot.shield = 0;
+
 
 		if(mediumMode){
 			varSpeed = 3;
@@ -531,6 +547,8 @@ int main(int argc, char* args[]){
 			speedTimerAdder = 8;
 			mov = invader->w * .1;
 			slice = 5;
+			pilot.shield = 1;
+			shieldRate = 30;
 		}
 
 		if(easyMode){
@@ -539,7 +557,12 @@ int main(int argc, char* args[]){
 			speedTimerAdder = 10;
 			mov = invader->w * .075;
 			slice = 4;
+			pilot.shield = 3;
+			shieldRate = 15;
 		}
+
+		int shieldRate2 = shieldRate;
+
 		//Initializing the two alien missles.
 		std::vector<AlienShots> alienMissle;
 		AlienShots temp( rand()%SCREEN_WIDTH - alienShots->w, alienShots->h, varSpeed, alienShots);
@@ -576,6 +599,12 @@ int main(int argc, char* args[]){
 					alienMissle[i].set_speed(varSpeed);
 				}
 			}
+
+			if( !hardMode && int(((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC)) % shieldRate == 0 && int(((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC)) != 0){
+				pilot.shield++;
+				shieldRate += shieldRate2;
+			}
+
 			if(alienVec.size() <= 0){
 				initAliens(alienVec);
 			}
@@ -597,8 +626,15 @@ int main(int argc, char* args[]){
 				endOfScreen = false;
 			}
 
+			std::stringstream streamTempMessage;
+			streamTempMessage << pilot.shield;
+			if(pilot.shield >=5)
+				shieldColor = scoreColor;
+			else
+				shieldColor = textColor;
+			SDL_Surface* tempMessage = TTF_RenderText_Solid(scoreFont, streamTempMessage.str().c_str(), shieldColor);
 			//Displays the pilot.
-			pilot.show(screen);
+			pilot.show(screen, tempMessage);
 
 			//For the alien's missle.
 			for(int i = 0; i < alienMissle.size(); ++i){
@@ -611,7 +647,10 @@ int main(int argc, char* args[]){
 				}
 
 				if(pilot.check_collision(alienMissle[i].get_rects())){
-					dead = true;
+					if(pilot.shield <= 0)
+						dead = true;
+					else
+						pilot.shield--;
 				}
 			}
 
