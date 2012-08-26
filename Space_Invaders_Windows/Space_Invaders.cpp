@@ -8,6 +8,8 @@ Written by: Shane Satterfield
 #TODO::Missle Mode.
 #TODO::Sound effects/music and ability to mute it.
 #TODO::Update the controls screen.
+#TODO::The amount of shield that you have can change the weapon that you use.
+#TODO::You can expend a certain amount of shield to fire a more powerful shot. It might be able to clear the screen.
 
 */
 #include "SDL/SDL.h"
@@ -540,7 +542,9 @@ int main(int argc, char* args[]){
 		int mov = invader->w*.1;
 		int slice = 3;
 		int shieldRate = 0;
-		pilot.shield = 0;
+		int points = 0;
+		double ptMult = 1;
+		pilot.shield = 1;
 
 
 		if(mediumMode){
@@ -551,6 +555,7 @@ int main(int argc, char* args[]){
 			slice = 5;
 			pilot.shield = 0;
 			shieldRate = 45;
+			ptMult = .5;
 		}
 
 		if(easyMode){
@@ -561,6 +566,7 @@ int main(int argc, char* args[]){
 			slice = 4;
 			pilot.shield = 3;
 			shieldRate = 15;
+			ptMult = .2;
 		}
 
 		pilot.hardMode = hardMode;
@@ -665,7 +671,7 @@ int main(int argc, char* args[]){
 			std::stringstream streamer;
 			streamer << "Speed: " << varSpeed << "     Survival Time: " << ((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC);
 			std::stringstream streamer2;
-			streamer2 << "FPS: " << frames_per << "     Shield: " << pilot.shield;
+			streamer2 << "FPS: " << frames_per << "     Shield: " << pilot.shield << "     Score: " << points;
 			score = TTF_RenderText_Solid(scoreFont, streamer.str().c_str(), scoreColor);
 			
 			apply_surface(0,0,score, screen);
@@ -688,6 +694,9 @@ int main(int argc, char* args[]){
 			}
 			if(update.get_ticks() > 1000){
 				frames_per = frames / (keeper.get_ticks() / 1000.f);
+				points += (pilot.shield + varSpeed) * ptMult;
+				
+
 				update.start();
 			}
 
