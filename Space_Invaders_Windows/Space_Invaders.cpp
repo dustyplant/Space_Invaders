@@ -649,7 +649,7 @@ int main(int argc, char* args[]){
 				alienMissle[i].move(pilot.get_rects(), SCREEN_HEIGHT);
 				if(alienMissle[i].getHit()){
 					alienMissle[i].unHit();
-					alienMissle[i].reset(rand()%(SCREEN_WIDTH - alienShots->w), rand()%(SCREEN_HEIGHT - alienShots->h) / slice);
+					alienMissle[i].reset(rand()%int(SCREEN_WIDTH - alienShots->w - unit->w) + int(unit->w/2), rand()%(SCREEN_HEIGHT - alienShots->h) / slice);
 				}
 
 				if(pilot.check_collision(alienMissle[i].get_rects())){
@@ -664,12 +664,6 @@ int main(int argc, char* args[]){
 			checkHyperBeam(hyperBeam, alienVec, alienMissle);
 
 
-			while(SDL_PollEvent(&event)){
-				//To close the window.
-				if(event.type == SDL_QUIT){
-					quit = true;
-				}
-			}
 
 			std::stringstream streamer;
 			streamer << "Speed: " << varSpeed << "     Survival Time: " << ((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC);
@@ -685,10 +679,16 @@ int main(int argc, char* args[]){
 
 			pilot.pilotMovement(hyperBeam, shots, shotPause, SCREEN_WIDTH, FRAMES_PER_SECOND, frames_per);
 
-			if(SDL_Flip(screen) == -1)
-				return 1;
-			
 
+			if(SDL_Flip(screen) == -1)
+				return 1;			
+
+			while(SDL_PollEvent(&event)){
+				//To close the window.
+				if(event.type == SDL_QUIT){
+					quit = true;
+				}
+			}
 			if(update.get_ticks() > 1000){
 				frames_per = frames / (keeper.get_ticks() / 1000.f);
 				update.start();
