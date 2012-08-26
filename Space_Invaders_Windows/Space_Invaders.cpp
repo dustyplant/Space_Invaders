@@ -52,7 +52,7 @@ TTF_Font *font = NULL;
 TTF_Font *scoreFont = NULL;
 //Bluish
 SDL_Color scoreColor = {0, 0xEE, 0xEE};
-SDL_Color shieldColor = {0, 0xEE, 0xEE};
+SDL_Color shieldColor = {0, 0, 0};
 //Maroon
 SDL_Color textColor = {0x80, 0x00, 0x00};
 SDL_Event event;
@@ -634,10 +634,7 @@ int main(int argc, char* args[]){
 
 			std::stringstream streamTempMessage;
 			streamTempMessage << pilot.shield;
-			if(pilot.shield >=3)
-				shieldColor = scoreColor;
-			else
-				shieldColor = textColor;
+
 			SDL_Surface* tempMessage = TTF_RenderText_Solid(scoreFont, streamTempMessage.str().c_str(), shieldColor);
 			//Displays the pilot.
 			pilot.show(screen, tempMessage);
@@ -668,7 +665,7 @@ int main(int argc, char* args[]){
 			std::stringstream streamer;
 			streamer << "Speed: " << varSpeed << "     Survival Time: " << ((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC);
 			std::stringstream streamer2;
-			streamer2 << "FPS: " << frames_per;
+			streamer2 << "FPS: " << frames_per << "     Shield: " << pilot.shield;
 			score = TTF_RenderText_Solid(scoreFont, streamer.str().c_str(), scoreColor);
 			
 			apply_surface(0,0,score, screen);
