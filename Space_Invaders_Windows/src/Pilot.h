@@ -43,6 +43,8 @@ public:
     bool check_collision( std::vector<SDL_Rect> &A);
 
     int shield;
+
+    bool hardMode;
     
     //Gets the collision boxes
     std::vector<SDL_Rect> &get_rects();

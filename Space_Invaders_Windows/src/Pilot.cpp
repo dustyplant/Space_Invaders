@@ -24,6 +24,8 @@ Pilot::Pilot( int X, int Y, SDL_Surface* temp, SDL_Surface* shieldTemp, SDL_Surf
     image = temp;
     shieldImage = shieldTemp;
     lowShield = lowTemp;
+
+    hardMode = true;
     
     //Create the necessary SDL_Rects
     box.resize( 6 );
@@ -105,15 +107,19 @@ void Pilot::pilotMovement(std::vector<Shot> &hyperBeam, SDL_Surface* shots, cloc
 }
 
 void Pilot::show(SDL_Surface* screen, SDL_Surface* tempMessage){
-    if(shield >= 5){
-        apply_surface(x,y,shieldImage,screen);
+    if(!hardMode){
+        if(shield >= 3){
+            apply_surface(x,y,shieldImage,screen);
+        }
+        else if(shield > 0){
+            apply_surface(x,y,lowShield,screen);
+        }
+        else{
+            apply_surface(x,y,image,screen);
+        } 
     }
-    else if(shield > 0){
-        apply_surface(x,y,lowShield,screen);
-    }
-    else{
+    else
         apply_surface(x,y,image,screen);
-    } 
     apply_surface(x + (image->w - tempMessage->w)/2, y + (image->h - tempMessage->h)/1.35, tempMessage, screen);
 }
 

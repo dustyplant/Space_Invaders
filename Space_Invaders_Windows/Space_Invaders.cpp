@@ -2,10 +2,12 @@
 Written by: Shane Satterfield
 08-22-2012
 
-#TODO::Title Screen
-#TODO::Difficulty mode settings/menu
-#TODO::Add different weapons, and shields.
+#TODO::Add different weapons.
+#TODO::Add super-shield or last-resort shield.
 #TOOO::Have a score board.
+#TODO::Missle Mode.
+#TODO::Sound effects/music and ability to mute it.
+#TODO::Update the controls screen.
 
 */
 #include "SDL/SDL.h"
@@ -547,8 +549,8 @@ int main(int argc, char* args[]){
 			speedTimerAdder = 8;
 			mov = invader->w * .1;
 			slice = 5;
-			pilot.shield = 1;
-			shieldRate = 30;
+			pilot.shield = 0;
+			shieldRate = 45;
 		}
 
 		if(easyMode){
@@ -560,6 +562,8 @@ int main(int argc, char* args[]){
 			pilot.shield = 3;
 			shieldRate = 15;
 		}
+
+		pilot.hardMode = hardMode;
 
 		int shieldRate2 = shieldRate;
 
@@ -600,13 +604,15 @@ int main(int argc, char* args[]){
 				}
 			}
 
+			/*
 			if( !hardMode && int(((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC)) % shieldRate == 0 && int(((float(clock()) - float(survivalTime))/CLOCKS_PER_SEC)) != 0){
 				pilot.shield++;
 				shieldRate += shieldRate2;
-			}
+			}*/
 
 			if(alienVec.size() <= 0){
 				initAliens(alienVec);
+				pilot.shield++;
 			}
 			fps.start();
 
@@ -628,7 +634,7 @@ int main(int argc, char* args[]){
 
 			std::stringstream streamTempMessage;
 			streamTempMessage << pilot.shield;
-			if(pilot.shield >=5)
+			if(pilot.shield >=3)
 				shieldColor = scoreColor;
 			else
 				shieldColor = textColor;
@@ -647,7 +653,7 @@ int main(int argc, char* args[]){
 				}
 
 				if(pilot.check_collision(alienMissle[i].get_rects())){
-					if(pilot.shield <= 0)
+					if(hardMode || pilot.shield <= 0)
 						dead = true;
 					else
 						pilot.shield--;
