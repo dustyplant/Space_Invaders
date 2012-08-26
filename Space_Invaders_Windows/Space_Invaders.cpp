@@ -720,14 +720,17 @@ int main(int argc, char* args[]){
 					if(event.type == SDL_QUIT){
 						quit = true;
 					}
-
+					else if(event.type == SDL_KEYDOWN || event.type == SDL_MOUSEBUTTONUP){
+						dead = false;
+					}
+					/*
 					if(event.type == SDL_KEYDOWN){
 						switch(event.key.keysym.sym ){
 							case SDLK_RETURN:
 								dead = false;
 								break;
 						}
-					}
+					}*/
 				}
 			}
 		}
