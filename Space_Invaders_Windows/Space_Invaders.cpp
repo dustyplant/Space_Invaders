@@ -4,7 +4,6 @@ Written by: Shane Satterfield
 
 #TODO::Add different weapons.
 #TODO::Add super-shield or last-resort shield.
-#TOOO::Have a score board.
 #TODO::Missle Mode.
 #TODO::Sound effects/music and ability to mute it.
 #TODO::Update the controls screen.
