@@ -435,7 +435,8 @@ int main(int argc, char* args[]){
 						quit = true;
 					}
 					else if(event.type == SDL_KEYDOWN || event.type == SDL_MOUSEBUTTONUP){
-						dead = false;
+						if(event.key.keysym.sym != SDLK_SPACE && event.key.keysym.sym != SDLK_RIGHT && event.key.keysym.sym != SDLK_LEFT)
+							dead = false;
 					}
 				}
 			}
