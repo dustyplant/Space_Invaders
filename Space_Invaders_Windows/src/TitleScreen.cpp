@@ -38,7 +38,7 @@ bool TitleScreen::titleScreen(bool &quit, bool &hardMode, bool &mediumMode, bool
 	//Purple-ish
 	SDL_Color titleColor = {0xBF, 0x5F, 0xFF};
 
-	titleFont = TTF_OpenFont("res/fonts/arial.ttf", 50);
+	titleFont = TTF_OpenFont("res/Fonts/arial.ttf", 50);
 	if(titleFont == NULL){
 		cleanTitleScreen(titleName, titleFont);
 		return false;
@@ -50,7 +50,7 @@ bool TitleScreen::titleScreen(bool &quit, bool &hardMode, bool &mediumMode, bool
 		return false;
 	}
 	
-	menuFont = TTF_OpenFont("res/fonts/arial.ttf", 20);
+	menuFont = TTF_OpenFont("res/Fonts/arial.ttf", 20);
 	if(menuFont == NULL){
 		cleanTitleScreen(titleName, menuFont);
 		return false;
@@ -180,7 +180,7 @@ bool TitleScreen::displayControls(SDL_Color color, bool &quit, SDL_Event &event)
 	SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0,0,0));
 
 	SDL_Surface* ctrlMessage = NULL;
-	TTF_Font* ctrlFont = TTF_OpenFont( "res/fonts/arial.ttf", 50);
+	TTF_Font* ctrlFont = TTF_OpenFont( "res/Fonts/arial.ttf", 50);
 	if(ctrlFont == NULL){		
 		return false;
 	}
@@ -197,7 +197,7 @@ bool TitleScreen::displayControls(SDL_Color color, bool &quit, SDL_Event &event)
 	SDL_FreeSurface(ctrlMessage);		
 
 	TTF_CloseFont(ctrlFont);
-	ctrlFont = TTF_OpenFont( "res/fonts/arial.ttf", 20);
+	ctrlFont = TTF_OpenFont( "res/Fonts/arial.ttf", 20);
 	if(ctrlFont == NULL){
 		return false;
 	}

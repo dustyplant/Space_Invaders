@@ -98,10 +98,10 @@ bool load_files(){
 	explosion = load_image("res/Images/explosion.bmp");
 	if(explosion == NULL)
 		return false;
-	font = TTF_OpenFont("res/fonts/armalite.ttf", 130);
+	font = TTF_OpenFont("res/Fonts/armalite.ttf", 130);
 	if(font == NULL)
 		return false;
-	scoreFont = TTF_OpenFont("res/fonts/arial.ttf", 20);
+	scoreFont = TTF_OpenFont("res/Fonts/arial.ttf", 20);
 	if(scoreFont == NULL)
 		return false;
 	return true;
